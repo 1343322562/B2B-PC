@@ -1,0 +1,35 @@
+/*.ix{background-color:#fff;}*/
+.ix-content{margin:0 auto;}
+.ix-content .pointer{cursor: pointer;}
+.ix-content__slideImg{overflow:hidden;}
+.ix-content__slideImg img{width:100%;min-height: 400px;}
+.ix-content__slideImg_left{width:1200px;}
+.ix-content__slideImg_right{width:240px;}
+.ix-content__slideImg_right img{width:100%;float:left;}
+.ix-content__slideImg_right>a{line-height:0;display:block;}
+.ix-content__roundButton{background-color: #fff;margin:10px 0;display: flex;flex-wrap: wrap;}
+.ix-content__roundButton>.item{text-align: center;padding: 10px 0;width: 0;flex-grow: 1;}
+.ix-content__roundButton>.item .icon{width: 80%;margin: 0 auto;padding-top: 80%;background:no-repeat center center; background-size: contain;}
+.ix-content__roundButton>.item .name{font-size: 18px;padding-top: 10px;display: block;}
+.ix-content__modular>.block0,
+.ix-content__modular>.block1,
+.ix-content__modular>.block1 .x2{display: flex;}
+.ix-content__modular>.block0 .item,
+.ix-content__modular>.block1 .d1,
+.ix-content__modular>.block1 .x3{width: 0;flex-grow: 1;}
+.ix-content__modular>.block0 .item>.icon{width: 100%;}
+.ix-content__modular>.block1 .icon{width: 100%;min-height: 20px;background: red;}
+.ix-content__modular>.block2 .title{text-align: center;font-size: 20px;font-weight: bold;}
+.ix-content__modular>.block2 .title>.text{display: inline-block;position: relative;height: 30px;line-height: 30px;}
+.ix-content__modular>.block2 .title>.text:after,
+.ix-content__modular>.block2 .title>.text:before{content: "";position: absolute;top: 13px;width: 40px;height: 3px;background-color: #333;border-radius: 3px;}
+.ix-content__modular>.block2 .title>.text:after{left: 120%;}
+.ix-content__modular>.block2 .title>.text:before{right: 120%;}
+.ix-content__modular>.block2 .list>.icon{width: 100%;}
+.ix-content__goodsList{display:flex;flex-wrap: wrap;}
+.ix-content__goodsList>.item{width: 170px;padding: 10px;height: 240px;position: relative;background-color: #fff;margin: 0px 5px 10px 5px;}
+.ix-content__goodsList>.item .img{background:no-repeat center center;background-size: contain;padding-top: 100%;}
+.ix-content__goodsList>.item .name{display:-webkit-box;word-break:break-all;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-overflow:ellipsis;font-weight:500;padding-top: 10px;}
+.ix-content__goodsList>.item .price{position: absolute;left: 10px;bottom: 10px;}
+.ix-content__goodsList>.item .price>.now{color: red;font-size: 18px;}
+.ix-content__goodsList>.item .price>.before{color: #777;text-decoration: line-through;padding-left: 5px;}

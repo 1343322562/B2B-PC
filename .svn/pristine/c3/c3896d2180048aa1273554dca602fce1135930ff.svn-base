@@ -1,0 +1,143 @@
+// @import 'antd/dist/antd.css';
+a{
+    text-decoration: none;
+    color: #333333 !important;
+}
+.my-content{
+    margin:0 auto;
+    .block{
+        background-color: #fff;
+    }
+    .collection{
+        margin-bottom: 20px;
+        .list{
+            display: flex;
+            flex-wrap: wrap;
+            padding-bottom: 10px;
+            .item{
+                width: 130px;
+                margin: 20px 10px 0 10px;
+               .icon{
+                    $wh: 110px;
+                    background-color: #eee;
+                    width: $wh;
+                    height: $wh;
+                    margin: 0 auto;
+                    display: block;
+               }
+               .goodsName{
+                   font-size: 12px;
+                   padding: 10px;
+                   color: #666;
+                   a:hover{
+                       text-decoration: underline;
+                       color: #df0011;
+                   }
+               }
+            }
+        }
+    }
+    .order{
+        .btn1 {
+            display: flex;
+            justify-content: space-around;
+            .item{
+                width: 100px;
+                text-align: center;
+                padding: 30px 0;
+                .price {
+                    font-size: 23px;
+                }
+            }
+        }
+        .btn{
+            display: flex;
+            justify-content: center;
+            .item{
+                width: 100px;
+                text-align: center;
+                padding: 30px 0;
+                .icon{
+                    $wh:40px;
+                    width: $wh;
+                    height: $wh;
+                    display: inline-block;
+                    background:no-repeat center center;
+                    background-size: cover;
+                    margin-bottom: 5px;
+                }
+                .dsh{background-image: url(../../images/my_page_icon_dsh.png);}
+                .dfk{background-image: url(../../images/my_page_icon_dfk.png);}
+                .th{background-image: url(../../images/my_page_icon_th.png);}
+                .yqx{background-image: url(../../images/my_page_icon_yqx.png);}
+                .ywc{background-image: url(../../images/my_page_icon_ywc.png);}
+                .qb{background-image: url(../../images/my_page_icon_qb.png);}
+                .name{display: block;}
+            }
+        }
+    }
+    .l2{float: left;width: 650px;}
+    .r1{float: right;width: 300px;}
+    .blockTitle{
+        $height: 50px;
+        height: $height;
+        line-height: $height;
+        border-bottom: 1px solid #e8e8e8;
+        padding-left: 20px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+
+        .blockMore{float: right;margin-right: 20px;font-size: 14px;color: #999;}
+    }
+    .head{
+        position: relative;
+        margin-bottom: 25px;
+        .title,.info{
+            padding-left:280px;
+        }
+        .info{
+            display: flex;
+            padding-bottom: 30px;
+            .item{
+                flex-grow: 1;
+                width: 0;
+                text-align: left;
+                padding: 30px 0;
+                .num{font-weight: bold;font-size: 23px;}
+                .name{display: block;padding-top: 10px;}
+            }
+        }
+        .user{
+            $overflow: -6px;
+            position: absolute;
+            width: 250px;
+            background-color: #cd1e1c;
+            top: $overflow;
+            left: 0;
+            bottom: $overflow;
+            box-shadow: 2px 2px 10px #aaa;
+            .img{
+                $wh: 60px;
+                width: $wh;
+                height: $wh;
+                border: 3px solid #fff;
+                border-radius: 100%;
+                margin: 0 auto;
+                background: #fff url("../../images/my_page_icon_user.png")no-repeat center center;
+                background-size: cover;
+                margin-top: 25px;
+            }
+            .name{text-align: center;color: #fff;font-size: 18px;font-weight: bold; padding-top: 10px;}
+            .addr{
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                background-color: #21212d;
+                color: #ebc527;
+                padding: 10px;
+                right: 0;
+            }
+        }
+    }
+}

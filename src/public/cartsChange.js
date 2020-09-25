@@ -1,0 +1,101 @@
+
+import { toast } from './utils.js';
+// 根据秒杀限购数量判断是否更新 price 
+export const changeCarsNumUpdatePrice = (item, realQty, type) => {
+	console.log(type)
+	if ((realQty > item.msMaxQty + 1 || realQty < item.msMaxQty - 1) && type != 'input' && type != 'onload') return item.price
+	console.log(item.msMaxQty , realQty)
+	console.log(item.msMaxQty < realQty)
+	switch(item.msMaxQty < realQty) {
+		case true:
+			console.log(realQty, item.realQty, 111)
+			if (type == 0 || type == 'input') toast(`超过秒杀限购数量(${item.msMaxQty}) ，已恢复原价`)
+			return item.orgiPrice 		// 回复原价
+		case false:
+			return item.msPrice 			// 回复秒杀价
+	}
+}
+export const changeItemNum = (item, n, type) => {
+	let min = item.minSupplyQty || 1,
+		step = item.supplySpec || 1;
+	if(type == 0) {
+		n += (n ? step : min);
+	} else if(type == 1) {
+		n -= (n - step >= min ? step : min);
+	} else if(type == 2) {
+		let n0 = n - min;
+		n = n0 <= 0 ? min : (min + (n0 <= step ? step : step * parseInt(n0 / step)))
+	}
+	return n;
+}
+export const contrastStock = (item, n) => {
+	let stockQty = item.stockQty
+	console.log('item, n', item, n, stockQty)
+	let max = item.maxSupplyQty || 9999,
+		deliveryType = item.deliveryType,
+		stock = item.stockQty||0;
+		console.log(stock)
+	if(deliveryType!="3"&&(n > stock || n > max)) {
+		return ('已达到最大购买数量' + (stock>max?max:stock));
+	} else {
+		return false;
+	}
+}
+export const minusCarts = () => { // 减购物车数量
+	
+}
+export const addCarts = (API,obj) => { // 加入购物车
+	const minSupplyQty = obj.goods.minSupplyQty ||1
+	const supplySpec = obj.goods.supplySpec || 1
+	const maxSupplyQty = obj.goods.maxSupplyQty || 9999
+	const stockQty = obj.goods.stockQty || 0
+	const deliveryType = obj.goods.deliveryType
+	const nowCarts = obj.cartsGoods
+	const itemNo = obj.goods.itemNo
+	const qty = obj.num || (nowCarts[itemNo]?supplySpec:minSupplyQty)
+	if(!qty)return
+	let num = obj.changeType == 'one'? obj.changeNum : (qty + (nowCarts[itemNo]?nowCarts[itemNo].realQty:0))
+	let items = [{
+		itemNo: obj.goods.itemNo,
+		realQty: num,
+		origPrice: obj.goods.origPrice||'',
+		validPrice: obj.goods.price,
+		specType: obj.goods.isBind?"2":(obj.goods.specType||'0'),
+		branchNo: obj.branchNo,
+		sourceType: '0',
+		sourceNo: obj.dbBranchNo,
+		parentItemNo: obj.goods.parentItemNo||''
+	}]
+	if(deliveryType!="3"&&!obj.changeType) {
+		if(num > maxSupplyQty || (num > stockQty)) {
+			obj.error && obj.error(obj.goods.stockNull? '库存不足':('已达到最大购买数量['+(maxSupplyQty>stockQty?stockQty:maxSupplyQty)+']'))
+			obj.complete && obj.complete()
+			return;
+		}
+	}
+	API.Carts.getShoppingCartInfo({
+		data: {
+			items:JSON.stringify(items)
+		},
+		success: ret => {
+			if (ret.code == '0') {
+				let arr = ret.data||[]
+				let goodsObj = {}
+				arr.forEach((shop,i) => {
+					shop.datas.forEach((item,z) => {
+						goodsObj[item.itemNo] = item
+					})
+				})
+				obj.success && obj.success(goodsObj)
+				obj.complete && obj.complete()
+			} else {
+				obj.error && obj.error(ret.msg)
+				obj.complete && obj.complete()
+			}
+		},
+		error: () => {
+			obj.error && obj.error('加入购物车失败')
+			obj.complete && obj.complete()
+		}
+	})
+}

@@ -1,0 +1,96 @@
+
+.coupon-list-content{
+    margin:0 auto;
+    .box{
+        background-color: #fff;
+        padding: 20px;
+        .list{
+            overflow: hidden;
+            padding-top: 20px;
+            min-height: 615px;
+            .li{
+                float: left;
+                display: flex;
+                margin: 0 20px 20px 0;
+                height: 82px;
+                &.act{
+                    .info{background-color: #e70012;}
+                }
+                .info{
+                    text-align: center;
+                    background-color: #cac8c8;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    position: relative;
+                    width: 120px;
+                    .msg{color: #fff;font-size: 14px;}
+                    &:before{
+                        content:"";
+                        position: absolute;
+                        background-color: #fff;
+                        width: 16px;
+                        height: 32px;
+                        border-radius:  0 16px 16px 0;
+                        top: 50%;
+                        left: 0;
+                        margin-top: -16px;
+                    }
+                    .money{
+                        color: #fff;
+                        font-size: 30px;
+                        font-weight: bold;
+                        i{font-size: .7em;vertical-align: top;}
+                    }
+                    
+                }
+                .explain{
+                    background-color: #f8f8f8;
+                    position: relative;
+                    padding-left: 10px;
+                    width: 160px;
+                    .name{padding-top: 10px;}
+                    .date{color: #999;font-size: 10px;}
+                    .btn{position: absolute;top: 5px;right: 5px;font-size: 10px;background:#e70012 ;color: #fff;border-radius: 5px;display: block;padding: 2px 5px;}
+                    .msg{
+                        $height:30px;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        padding-left: 10px;
+                        font-size: 12px;
+                        height: $height;
+                        line-height: $height;
+                        border-top: 1px solid #e8e8e8;
+                        i{
+                            display: inline-block;
+                            float: right;
+                            width: $height;
+                            height: $height;
+                            background: url('../../images/settel-eye.png')no-repeat center center;
+                            background-size: 20px;
+                        }
+                    }
+                }
+            }
+        }
+        .head{
+            position: relative;
+            padding-bottom: 15px;
+            .btn{
+                $bgColor: #cd1e1c;
+                .item{
+                    display: inline-block;
+                    margin-right: 20px;
+                    position: relative;
+                    font-size: 12px;
+                    padding-bottom: 1px;
+                }
+                .item.action{
+                    color: $bgColor;
+                    border-bottom: 2px solid $bgColor;
+                }
+            }
+        }
+    }
+}

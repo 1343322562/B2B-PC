@@ -1,0 +1,60 @@
+import ajax from './config'
+export default {
+  Public: {
+  	getCommonSetting: (param) => ajax.post(`supplymini/getCommonSetting.do`, param), // 获取系统配置
+  	findSalesManInfo: (param) => ajax.post(`supplymini/findSalesManInfo.do`, param), // 获取业务员信息
+  	searchItemCls: (param) => ajax.post(`supplymini/searchItemCls.do`, param), // 获取类别
+  	getAccBranchInfoAmt: (param) => ajax.post(`supplymini/getAccBranchInfoAmt.do`, param), // 获取用户余额
+  	getCartRecommend: (param) => ajax.post(`supplymini/getCartRecommend.do`, param), // 获取购物车推荐商品列表
+  	searchCollectByBranch: (param) => ajax.post(`supplymini/searchCollectByBranch.do`, param), // 获取收藏商品列表
+  	getAllPromotion: (param) => ajax.post(`supplymini/getAllPromotion.do`, param), // 获取所有促销信息
+  	searchSupplyCoupons: (param) => ajax.post(`supplymini/searchSupplyCoupons.do`, param), // 获取优惠券
+  	supplyCollect: (param) => ajax.post(`supplymini/supplyCollect.do`, param), // 改变商品收藏状态
+  	getHotItem:  (param) => ajax.post(`supplymini/getHotItem.do`, param), // 获取常购商品
+  },
+  Login: {
+    supplyLoginPwd: (param) => ajax.post(`supplymini/supplyLoginPwd.do`, param), // 账号密码登录
+  },
+  Index: {
+  	getIndexSetting: (param) => ajax.post(`supplymini/getIndexSetting.do`, param), // 获取首页
+  },
+  Carts: {
+  	getShoppingCartInfo: (param) => ajax.post(`supplymini/getShoppingCartInfo.do`, param), // 修改购物车并且修改网络购物车
+  	couldReplenishment: (param) => ajax.post(`supplymini/couldReplenishment.do`, param), // 判断是否可以补货
+  },
+  Goods: {
+  	itemSearch: (param) => ajax.post(`supplymini/itemSearch.do`, param), // 查询商品
+  	searchItemDetail: (param) => ajax.post(`supplymini/searchItemDetail.do`, param), // 查询商品详情图
+  },
+  Settlement:	{
+  	getSettlementPageInfo: (param) => ajax.post(`supplymini/getSettlementPageInfo.do`, param), // 购物车跳转结算页，获取所选商品
+  	getOrderMeetingCoupons: (param) => ajax.post(`supplymini/getOrderMeetingCoupons`, param), // 获取兑换券列表
+  	getSettlementPromotion: (param) => ajax.post(`supplymini/getSettlementPromotion.do`, param), // 获取满减满赠促销
+  	saveOrder: (param) => ajax.post(`supplymini/saveOrder.do`, param), // 保存订单
+  },
+  My: {
+  	getUnusedCouponsSum: (param) => ajax.post(`supplymini/getUnusedCouponsSum.do`, param), // 获取优惠券数量
+  	getBranchPoint: (param) => ajax.post(`supplymini/getBranchPoint.do`, param), // 获取用户积分
+  	findSupplyAcclist:  (param) => ajax.post(`supplymini/findSupplyAcclist.do`, param), // 获取积分存取记录
+  	getAccountFlow:  (param) => ajax.post(`supplymini/getAccountFlow.do`, param), // 获取储值记录
+  	getAccountFrozenFlow:  (param) => ajax.post(`supplymini/getAccountFrozenFlow.do`, param), // 获取授信明细
+  	getCouponsExplain: (param) => ajax.post(`supplymini/getCouponsExplain.do`, param), // 获取优惠券规则
+    getCouponsByBatchNo: (param) => ajax.post(`supplymini/getCouponsByBatchNo.do`, param), // 领取优惠券
+    getCouponsBatchNo: (param) => ajax.post(`supplymini/getCouponsBatchNo.do`, param), // 获取可领取的优惠券
+    getMsData: (param) => ajax.post(`supplymini/getMsData.do`, param), // 获取秒杀
+    getCount: (param) => ajax.post(`supplyandroid/getCount.do`, param), // 获取未读消息数量
+    findNotice: (param) => ajax.post(`supplyandroid/findNotice.do`, param), // 获取未读消息数量
+    findIndexNotice: (param) => ajax.post(`supplyandroid/findIndexNotice.do`, param), // 获取首页消息
+    searchIntegralStoreGoods: (param) => ajax.post(`supplymini/searchIntegralStoreGoods.do`, param), // 获取积分商品列表
+    submitIntegralStoreGoods: (param) => ajax.post(`supplymini/submitIntegralStoreGoods.do`, param), // 积分兑换商品
+  },
+  Order: {
+  	getOrderList:  (param) => ajax.post(`supplymini/getOrderList.do`, param), // 获取订单列表
+  	searchReturnOrder:   (param) => ajax.post(`supplymini/searchReturnOrder.do`, param), // 获取退货订单列表
+  	getOrderDetail:   (param) => ajax.post(`supplymini/getOrderDetail.do`, param), // 获取订单详情
+  	getOrderFlow:   (param) => ajax.post(`supplymini/getOrderFlow.do`, param), // 获取订单状态
+  	cancelOrder:   (param) => ajax.post(`supplymini/cancelOrder.do`, param), // 取消订单
+  	submitReceiveOrder:   (param) => ajax.post(`supplymini/submitReceiveOrder.do`, param), // 确定收货
+  	againOrder: (param) => ajax.post(`supplymini/againOrder.do`, param), // 获取加入购物车的商品，重下此单
+  }
+}

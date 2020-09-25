@@ -1,0 +1,165 @@
+
+.order-details-content{
+    margin:0 auto;
+    .thOrderDetails{
+        background-color: #fff;
+    }
+    .goodsList{
+        margin-top: 20px;
+        background-color: #fff;
+        border: 1px solid #e8e8e8;
+        .payInfo{
+            border-top: 1px solid #e8e8e8;
+            padding:20px;
+            position: relative;
+            .operationBtn{
+                position: absolute;
+                right: 20px;
+                bottom: 20px;
+                display:flex;
+                .red{background-color: red;}
+                .black{background-color: #aaa;}
+                .btn{
+                    width: 100px;
+                    height: 30px;
+                    line-height: 30px;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 20px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                }
+            }
+            .redText{
+                color: red;
+                span:last-child{
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }
+            p{
+                text-align: left;
+                font-size: 13px;
+                color: #777;
+                padding: 4px 0;
+                span{
+                    display: inline-block;
+                    &:first-child{
+                        width: 80px;
+                    }
+                }
+            }
+        }
+        .goods{
+            padding:15px 0;
+            font-size: 9px;
+            .li0{
+                text-align: left;
+                position: relative;
+                .icon{
+                    $wh: 80px;
+                    background-color: #f2f2f2;
+                    width: $wh;
+                    height: $wh;
+                    margin-left: 20px;
+                }
+                .msg{
+                    position: absolute;
+                    top: 0;
+                    left: 115px;
+                    .size{color: #999;}
+                }
+            }
+        }
+        .title{
+            $height: 30px;
+            background-color: #f4f4f4;
+            height: $height;
+            line-height: $height;
+            font-size: 10px;
+            >span{width: 0;}
+        }
+        .ul{
+            display: flex;
+            text-align: center;
+            >div{width: 0;}
+            .li0{flex-grow: 3;}
+            .li1{flex-grow: 1;}
+            .li2{flex-grow: 1;}
+            .li3{flex-grow: 1;}
+            .li4{flex-grow: 1;}
+        }
+    }
+    .head{
+        $borderColor: #e8e8e8;
+        background-color: #fff;
+        border: 1px solid $borderColor;
+        display: flex;
+        .info{
+            flex-grow: 1;
+            border-right: 1px solid $borderColor;
+            padding: 10px 20px;
+            height: 250px;
+            font-size: 14px;
+            .title{font-weight: bold;color: #333;}
+            .no{text-align: center;color: #999;padding-top: 30px;}
+            .status{text-align: center;font-weight: bold;font-size: 30px;padding: 20px 0;color: #72ab38;padding-bottom: 40px;}
+            .cnt{
+                font-size: 12px;
+                padding: 3px 0;
+                span{display: inline-block;}
+                span:first-child{width: 80px;}
+            }
+        }
+        .statusList{
+            flex-grow: 5;
+            padding: 20px 0;
+            .box{
+                overflow-y:auto;
+                max-height: 230px;
+                width: 98%;
+            }
+            .flow_li{
+                font-size: 11px;
+                overflow: hidden;
+                padding: 2px 0 2px 90px;
+                
+                color:#444;
+                >div{float: left;}
+                &:last-child{
+                    .r:after{width: 0;height: 0;}
+                }
+                .r{
+                    position: relative;
+                    margin-left: 20px;
+                    padding-left: 20px;
+                    padding-bottom: 10px;
+                    &:before,&:after{content: "";position:absolute;}
+                    &:after{
+                        left: 0;
+                        top: 0;
+                        width:1px;
+                        height: 100%;
+                        background-color: #e8e8e8;
+                    }
+                    &:before{
+                        $widht: 8px;
+                        width:$widht;
+                        height: $widht;
+                        background: #e8e8e8;
+                        border-radius: 100%;
+                        top: 0;
+                        left: -4px;
+                        z-index: 1;
+                    }
+                    .title{font-weight: bold;color: #000;font-size: 13px;}
+                    .cont{padding: 5px 0;}
+                }
+                .l{
+                    text-align: center;
+                }
+            }
+            
+        }
+    }
+}

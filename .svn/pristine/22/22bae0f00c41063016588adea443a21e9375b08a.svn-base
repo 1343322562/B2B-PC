@@ -1,0 +1,84 @@
+
+.order-list-content{
+    margin:0 auto;
+    .box{
+        background-color: #fff;
+        padding: 20px;
+        .listBox{
+            $color: #5b84ff;
+            min-height: 533px;
+            .item{
+                $height: 40px;
+                border-bottom: 1px solid #e8e8e8;
+                height: $height;
+                line-height: $height;
+                font-size: 10px;
+                a{color:$color;}
+            }
+        }
+        .title{
+            $height: 30px;
+            background-color: #f4f4f4;
+            height: $height;
+            line-height: $height;
+            font-size: 10px;
+            >span{width: 0;}
+        }
+        .ul{
+            display: flex;
+            text-align: center;
+            >div{width: 0;}
+            .li0{flex-grow: 2;text-align: left;padding-left: 20px;}
+            .li1{flex-grow: 2;}
+            .li2{flex-grow: 1;}
+            .li3{flex-grow: 1;}
+            .li4{flex-grow: 1;}
+            .li5{flex-grow: 1;}
+        }
+        .head{
+            position: relative;
+            padding-bottom: 15px;
+            .btn{
+                $bgColor: #cd1e1c;
+                .item{
+                    display: inline-block;
+                    margin-right: 20px;
+                    position: relative;
+                    font-size: 12px;
+                    padding-bottom: 1px;
+                }
+                .item.action{
+                    color: $bgColor;
+                    border-bottom: 2px solid $bgColor;
+                }
+            }
+            .search{
+                $height: 26px;
+                position: absolute;
+                top: -2px;
+                right: 0;
+                display: flex;
+                .form{
+                    width: 200px;
+                    border: 1px solid #e8e8e8;
+                    border-right: none;
+                    height: $height;
+                    input{
+                        border: none;
+                        width: 190px;
+                        height: $height;
+                        padding: 0 5px;
+                    }
+                }
+                .submit{
+                    display: block;
+                    width: 60px;
+                    background: #eee url(../../images/search-icon.png)no-repeat center center;
+                    background-size: 15px;
+                    border: 1px solid #e8e8e8;
+                    height: $height;
+                }
+            }
+        }
+    }
+}

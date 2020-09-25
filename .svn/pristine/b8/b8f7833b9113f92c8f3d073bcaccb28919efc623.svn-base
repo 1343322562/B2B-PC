@@ -1,0 +1,26 @@
+.lg{background-color: #e00000}
+.lg-head{background:#fff;}/*box-shadow:0 2px 10px #ddd;*/
+.lg-head>p{margin:0 auto;padding:10px 0;}
+.lg-head__logo{display:block;height:80px;width:50%;background:url("../../images/JCLogo.png")no-repeat left center;background-size: contain;}
+.lg-content{margin:0px auto;overflow:hidden;padding:60px 0;}
+.lg-content__right{float:right;width:300px;background:#fff;padding:30px;margin-right:20px;}/*box-shadow:0px 0px 10px 2px #ddd;*/
+.lg-content__right_title{font-size:18px;}
+.lg-content__right_msg{margin:20px 0 10px 0;font-size:11px;min-height:25px;line-height:25px;border:1px solid;padding:0 5px;}
+.lg-content__right_msg--warn{background:#fff9e1;color:#666;border-color:#f8d845;}
+.lg-content__right_msg--error{border-color:#df0011;color:#df0011;background:#ffebeb;}
+.lg-content__right_msg>i{display:block;height:100%;width:24px;background:url('../../images/loginAdnCart.png') no-repeat;float:left;}
+.lg-content__right_msg--warn>i{background-position:-84px -6px;}
+.lg-content__right_msg--error>i{background-position:-98px -75px;}
+.lg-content__right_form{border:1px solid #d2d2d2;height:40px;overflow:hidden;position:relative;margin-bottom:10px;}
+.lg-content__right_form>span{display:block;width:40px;border-right:1px solid #d2d2d2;height:100%;position:absolute;top:0;left:0;background:url('../../images/loginAdnCart.png')no-repeat;}
+.lg-content__right_form>div{margin-left:40px;height:100%;}
+.lg-content__right_form input{border:none;outline:none;margin:0;padding:0;width:95%;height:100%;padding-left:5%;}
+.lg-content__right_user>span{background-position:4px 4px;}
+.lg-content__right_user.lg-content__right_form--action>span{background-position:-131px -71px;}
+.lg-content__right_password>span{background-position:-37px 3px;}
+.lg-content__right_password.lg-content__right_form--action>span{background-position:-172px -71px;}
+.lg-content__right_form--action,.lg-content__right_form--action>span{border-color:#32a0e6;}
+.lg-content__right_form--action>span{background-color:#ebf6fe;}
+.lg-content__right_register{overflow:hidden;margin-bottom:30px;}
+.lg-content__right_register>a{color:#999;display:block;font-size:13px;}.lg-content__right_register>a:hover{text-decoration: underline;color:#df0011;}
+.lg-content__right_submit{color:#fff;font-size:20px;text-align:center;height:40px;line-height:40px;display:block;cursor:pointer;}

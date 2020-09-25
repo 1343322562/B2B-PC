@@ -1,0 +1,43 @@
+
+.user-integral-content{
+    margin:0 auto;
+    .user-integral-box{
+        background-color: #fff;
+        padding: 20px;
+        .title{
+            font-size: 18px;
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 20px;
+            .total{
+                float: right;
+                width: 400px;
+                font-weight: normal;
+                b{color: red;font-weight: bold;font-size: 20px;}
+            }
+        }
+        .list_title{
+            background-color: #f7f5f5;
+            height: 35px;
+            line-height: 35px;
+        }
+        .list_box{
+            height: 460px;
+        }
+        .liBlock{
+            span{
+                height: 35px;
+                line-height: 35px;
+            }
+        }
+        .ul{
+            display:flex;
+            padding-left: 20px;
+            font-size: 10px;
+            span{
+                flex-grow: 1;
+                width: 0;
+            }
+        }
+    }
+}

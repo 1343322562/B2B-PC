@@ -1,0 +1,63 @@
+.user-couponsReceive-content{
+    margin:0 auto;
+    .list{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        li{
+            width: 250px;
+            height: 103px;
+            margin: 10px 10px;
+            background: url('../../images/couponsReceive_icon.png')no-repeat center top;
+            background-size: cover;
+            box-shadow: 0 5px 20px 0 rgba(0,0,0,.1);
+            position: relative;
+            p{
+                width: 190px;
+                text-align: center;
+                color: #D1353B;
+            }
+            .money{
+                font-weight: bold;
+                height: 68px;
+                font-size: 50px;
+                i{font-size: .4em;padding-top: -20px;}
+            }
+            .btn{
+                display: block;
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 60px;
+            }
+        }
+    }
+    .title{
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        padding: 15px 0;
+        margin: 20px 0;
+        position: relative;
+        &:before,&:after{
+            $wh:12px;
+            content: "";
+            position: absolute;
+            top: 25px;
+            width: $wh;
+            height: $wh;
+            background:url("../../images/title_icon0.png")no-repeat center center;
+            background-size: contain;
+        }
+        &:before{
+            left: 50%;
+            margin-left: 68px;
+            transform: rotate(180deg);
+        }
+        &:after{
+            right: 50%;
+            margin-right: 68px;
+        }
+    }
+}

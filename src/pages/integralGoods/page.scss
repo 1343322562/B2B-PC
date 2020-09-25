@@ -1,0 +1,35 @@
+
+.integral-goods-content{
+    margin:0 auto;
+    >.head{
+        background-color: #fff;
+        padding: 15px 20px;
+        font-weight: bold;
+        .money{color: #e70012;padding-left: 10px;}
+    }
+    >.goodsList{
+        padding-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        .li{
+            width: 190px;
+            background-color: #fff;
+            padding-top: 10px;
+            height: 300px;
+            margin: 0 5px 10px 5px;
+            position: relative;
+            .img{background: #f2f2f2 no-repeat center center;width: 90%;padding-top:90%;margin: 0 auto;}
+            .info{
+                padding: 5px 10px 5px 10px;
+                .name{min-height: 36px;}
+                .size{color: #666;font-size: 10px;}
+                .price{
+                    .now{color: red;font-size: 18px;}
+                    .before{padding-left: 8px;text-decoration: line-through;color:#777;}
+                }
+            }
+            .btn{color: #fff;position: absolute;bottom: 10px;right: 10px;background-color: #e70012;border-radius: 5px;width: 50px;line-height: 25px;text-align: center;font-size: 12px;cursor: pointer;}
+            .btn.null{background-color: #999;}
+        }
+    }
+}

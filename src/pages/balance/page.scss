@@ -1,0 +1,80 @@
+
+.user-balance-content{
+    margin:0 auto;
+    .user-balance-box{
+        background-color: #fff;
+        padding: 20px;
+        .list_title{
+            background-color: #f7f5f5;
+            height: 35px;
+            line-height: 35px;
+            margin-top: 10px;
+        }
+        .ul{
+            display:flex;
+            padding-left: 20px;
+            font-size: 10px;
+            span{
+                flex-grow: 1;
+                width: 0;
+            }
+            .center{text-align: center;}
+        }
+        .list_box{
+            height: 460px;
+        }
+        .liBlock{
+            span{
+                height: 35px;
+                line-height: 35px;
+            }
+        }
+        .titleBtn{
+            padding-top: 50px;
+            $bgColor: #cd1e1c;
+            .item{
+                display: inline-block;
+                margin-right: 20px;
+                position: relative;
+                font-size: 15px;
+                padding-bottom: 1px;
+                cursor: pointer;
+            }
+            .item.action{
+                color: $bgColor;
+                border-bottom: 2px solid $bgColor;
+            }
+        }
+        .head{
+            display: flex;
+            .l{
+                text-align: center;
+                width: 200px;
+                font-weight: bold;
+                color: #474e5d;
+                padding-top: 20px;
+                .title{
+                    font-size: 16px;
+                }
+                .money{
+                    font-size: 25px;
+                }
+            }
+            .r{
+                display: flex;
+                padding-top: 20px;
+                justify-content: center;
+                padding-left: 100px;
+                .item{
+                    width: 150px;
+                    font-size: 12px;
+                    text-align: center;
+                    span{
+                        display: block;
+                        &:last-child{font-weight: bold;font-size: 15px;padding-top: 5px;}
+                    }
+                }
+            }
+        }
+    }
+}

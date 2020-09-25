@@ -1,0 +1,36 @@
+
+.action-goods-content{
+    margin:0 auto;
+    .goodsList{
+        display: flex;
+        flex-wrap:wrap;
+        .item{
+            width: 180px;
+            padding: 10px;
+            background-color: #fff;
+            margin:0px 20px 20px 0;
+            .img{
+                display: block;
+                width: 180px;
+                height: 180px;
+                background:no-repeat center center;
+                background-size: contain;
+            }
+            .name{
+                display: block;
+                font-size: 13px;
+                color: #000;
+                height: 38px;
+                margin-top:10px ;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+            .size{color: #777;}
+            .price{
+                color: red;
+                font-size: 20px;
+            }
+        }
+    }
+}
