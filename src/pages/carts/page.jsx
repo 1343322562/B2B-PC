@@ -9,7 +9,8 @@ import { contrastStock, changeItemNum, changeCarsNumUpdatePrice } from '../../pu
 import { getAllPromotion, getGoodsTag } from '../../public/promotion.js';
 import TopSearch from '../../public/top_search.jsx';
 
-import { Menu, Dropdown } from 'antd';
+import 'antd/dist/antd.css';
+import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import API from '../../api'
 
@@ -234,7 +235,8 @@ class Main extends Component{
 						branchNo: branchNo,
 						sourceType: '0',
 						sourceNo: dbBranchNo,
-						parentItemNo: goods.parentItemNo||''
+						parentItemNo: goods.parentItemNo||'',
+						currentPromotionNo: goods.currentPromotionNo
 					})
 				})
 				this.getPageData(items)
@@ -266,6 +268,11 @@ class Main extends Component{
 		this.setState({config})
 		config.replenishFlag != '0' && this.isReplenish(config)
 	}
+	// 选择默认的促销
+	defaultPromoNo(promoStr) {
+		let defaultPromotionNo = promoStr.includes(',') ? promoStr.split(',')[0] : [promoStr]
+		return defaultPromotionNo
+	}
 	getPageData(items){
 		let t=this;
 		console.log(items, 'items')
@@ -279,7 +286,6 @@ class Main extends Component{
 						let arr=obj.data||[],
 						list=new Object(),
 						listKey=new Array();
-						// let S_cartObj = commit[types.GET_CARTS]()
 						arr.forEach((shop,i) => {
 							shop.datas.forEach((item,z) => {
 								let type = shop.sourceType == '0' ? (item.stockType == '0' ? 'cw' : 'dw') : shop.sourceNo ,
@@ -288,9 +294,11 @@ class Main extends Component{
 								item.nowNum=item.realQty;
 								item.imgUrl = item.itemNo+'/'+ getGoodsImgSize(item.picUrl,1)
 								// 添加当前所选的促销，若没有选择，默认选择最近的促销
-								// item.currentPromotionNo = S_cartObj[item.itemNo].currentPromotionNo || '' 
-								item.currentPromotionType = shop.sourceType == 0 ? item.currentPromotionNo.slice(0, 2) : item.currentPromotionNo.slice(0, 3) 
-								item.promotionCollectionsArr = item.promotionCollections.includes(',') ?  item.promotionCollections.split(',') : [item.promotionCollections]
+								if (item.promotionCollections) {
+									item.currentPromotionNo = item.currentPromotionNo || t.defaultPromoNo(item.promotionCollections)
+									item.currentPromotionType = shop.sourceType == 0 ? item.currentPromotionNo.slice(0, 2) : item.currentPromotionNo.slice(0, 3) 
+									item.promotionCollectionsArr = item.promotionCollections.includes(',') ?  item.promotionCollections.split(',') : [item.promotionCollections]	
+								}
 								if(item.itemNo.indexOf('Z')!=-1) item.isBind = true
 								const tag = getGoodsTag(item, this.promotionObj,true)
 								item = Object.assign(item, tag)
@@ -327,15 +335,66 @@ class Main extends Component{
 			complete: () => {
 				this.setState({ loading: false  })
 			}
-			
-			
 		})
 	}
 	getOpenUrl (no) {
 		return "#/item/details?item_type=0&item_no="+no
 	}
+	// 选择促销的下拉框
+	selectPromoMenu(k, item, i) {
+		const _this = this
+		const menu = (
+			<Menu>
+				{
+					item.promotionCollectionsArr.map((tag, index) => {
+						return (
+							<Menu.Item key={index}>
+								<a onClick={() => _this.selectPromotionClick(i, tag, k)}>
+									{tag.includes('BF')?'买满赠':''}
+									{tag.includes('FS')?'首单特价':''}
+									{tag.includes('BG')?'买赠':''}
+									{tag.includes('SD')?'单日限购':''}
+									{tag.includes('MJ')?'满减':''}
+									{tag.includes('MQ')?'数量满减':''}
+									{tag.includes('MS')?'秒杀':''}
+									{tag.includes('ZK')?item.discount:''}
+								</a>
+							</Menu.Item>
+						)
+					})
+				}
+			</Menu>
+		);
+		const dropdown = (
+			<Dropdown overlay={menu} trigger="click">
+				<a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+					换促销 <DownOutlined />
+				</a>
+			</Dropdown>
+		)
+		return dropdown
+	}
+	/**
+	 *  换促销
+	 * 	i 	商品对象下标
+	 *  tag 当前要选的 促销
+	 *  k	  当前门店
+	 */
+	selectPromotionClick(i, tag, k) {
+		console.log(i, tag)
+		let { list, listKey } = this.state
+		console.log(list, listKey, k)
+		if (list[k].item[i].currentPromotionNo == tag) return message.warning('请选择不同的促销')
+		list[k].item[i].currentPromotionNo = tag
+		list[k].item[i].currentPromotionType = tag.slice(0,2)
+		console.log(list)
+		this.setState({ list })
+		message.success('切换成功')
+	}
 	render(){
+		console.log(1)
 		let t=this,{loading,list,listKey,config,replenish}=t.state;
+		console.log(list)
 		return (<div className="carts">
 			<Loading show={loading} />
 			<Header getConfig={this.getConfig} />
@@ -381,7 +440,7 @@ class Main extends Component{
 														<p className="size">规格 : {item.itemSize}</p>
 														<div className="carts-content__cartsList_goods__tag">
 															<span className="NonReturnable">{(item.enReturnGoods=='0'||item.isProhibit=='1')?"不可退":"可退"}</span>
-															{item.BF?<span className="drxg">买满赠</span>:''}
+															{/* {item.BF?<span className="drxg">买满赠</span>:''}
 															{item.FS?<span className="drxg">首单特价</span>:''}
 															{item.BG?<span className="drxg">买赠</span>:''}
 															{item.SD?<span className="drxg">单日限购</span>:''}
@@ -389,7 +448,18 @@ class Main extends Component{
 															{item.MQ?<span className="drxg">数量满减</span>:''}
 															{item.MS?<span className="drxg">秒杀</span>:''}
 															{item.ZK?<span className="drxg">{item.discount}</span>:''}
-															{item.discountMoney?<span className="drxg">优惠{item.discountMoney}元</span>:''}
+															{item.discountMoney?<span className="drxg">优惠{item.discountMoney}元</span>:''} */}
+															{item.currentPromotionType == 'BF'?<span className="drxg">买满赠</span>:''}
+															{item.currentPromotionType == 'FS'?<span className="drxg">首单特价</span>:''}
+															{item.currentPromotionType == 'BG'?<span className="drxg">买赠</span>:''}
+															{item.currentPromotionType == 'SD'?<span className="drxg">单日限购</span>:''}
+															{item.currentPromotionType == 'MJ'?<span className="drxg">满减</span>:''}
+															{item.currentPromotionType == 'MQ'?<span className="drxg">数量满减</span>:''}
+															{item.currentPromotionType == 'MS'?<span className="drxg">秒杀</span>:''}
+															{item.currentPromotionType == 'ZK'?<span className="drxg">{item.discount}</span>:''}
+															{
+																'promotionCollectionsArr' in item && item.promotionCollectionsArr.length>1 ? t.selectPromoMenu(k ,item, index) : ''
+															}
 														</div>
 													</div>
 												</div>
