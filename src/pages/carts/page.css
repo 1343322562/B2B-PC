@@ -1,4 +1,4 @@
-a{
+.carts-content__cartsList a, .c_top_nav__box_menu a{
     text-decoration: none !important;
     color: #333333 !important;
 }
@@ -58,3 +58,10 @@ p {
 .carts-content__cartsList_goods__tag>.drxg{background-color: transparent;color: #d40000;border-color: #d40000;}
 .carts-content__cartsList_goods_li0 .size{font-size: 13px;color: #999;}
 .ant-dropdown-link {background-color: #eeeeee;padding: 4px 8px;border-radius: 15px;vertical-align: middle;margin-left: 10px}
+.promotionType {width: 100%;background-color: #fff;padding-top: 9px;}
+.promotionType .typeTag{width: 85%;display: flex;justify-content: f;padding: 0 5% 0 8%;font-size: 14px;}
+.promotionType .tag{background-color: #FF0000;color: #f5f5f5;font-weight: bold;padding: 1px 7px;border-radius: 2px;}
+.promotionType .promoInfo{margin-left: 9px;padding: 1px;}
+.promotionType .typeInfo{width: 85%;display: flex;padding: 0 5% 0 8%;font-size: 14px;line-height: 18px;align-items: center;}
+.promotionType .content{color: #f3a310;display: inline-block;margin-top: 2px;}
+.promotionType .go{color: #913e71;font-size: 15px;margin-left: 150px;}

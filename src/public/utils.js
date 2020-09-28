@@ -107,3 +107,12 @@ export function tim(currentDay) {
   console.log(tragetTime, '这是一周前日期，格式为2010-01-01')
   return tragetTime;
 }
+
+// 删除数组中重复的值(对象)
+export const filterArr = (arr) => {
+  const map = {};
+  // 1、把数组元素作为对象的键存起来（这样就算有重复的元素，也会相互替换掉）
+  arr.forEach(item => map[JSON.stringify(item)] = item);
+  // 2、再把对象的值抽成一个数组返回即为不重复的集合
+  return Object.keys(map).map(key => map[key])
+}

@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Header from '../../public/header.jsx';
 import TopNav from '../../public/top_nav.jsx';
 import Footer from '../../public/footer.jsx';
 import Loading from '../../public/pageLoading.jsx';
 import './page.css';
-import { getGoodsImgSize,deepCopy, toast,getCookie } from '../../public/utils.js';
+import { getGoodsImgSize,deepCopy, toast,getCookie, filterArr } from '../../public/utils.js';
 import { contrastStock, changeItemNum, changeCarsNumUpdatePrice } from '../../public/cartsChange.js';
 import { getAllPromotion, getGoodsTag } from '../../public/promotion.js';
 import TopSearch from '../../public/top_search.jsx';
@@ -14,7 +14,7 @@ import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import API from '../../api'
 
-class Main extends Component{
+class Main extends Component {
 	constructor(props){ /* 初次加载 */
 		super(props);
 		this.state = {
@@ -24,6 +24,7 @@ class Main extends Component{
 			replenish:{},
 			loginLogo:'',
 			loading:false,
+			allPromotion: {} // 所有促销对象; { promotionNo: promotionOj }
 		}
 		this.getConfig = this.getConfig.bind(this)
 	}
@@ -31,13 +32,12 @@ class Main extends Component{
 		this.userObj = JSON.parse(getCookie('USER_INFO')||'{}')
 		this.setState({loading: true})
 		this.getPromotion()
-		
 	}
 	getPromotion () { // 获取全部促销
 		getAllPromotion(API,{
 			dbBranchNo: this.userObj.dbBranchNo,
 			complete: (obj)=> {
-				console.log(obj)
+				console.log(40, obj)
 				console.log(this.state)
 				this.promotionObj = obj
 				this.getPageData();
@@ -215,6 +215,7 @@ class Main extends Component{
 				itemNos.push(item.itemNo);
 			}
 		})
+		console.log(218,list)
 		this.props.history.replace('/order/settlement?selected='+escape(JSON.stringify(itemNos))+(replenish?('&replenishNo='+replenish):''))
 	}
 	changeCartsGoods(k,item){
@@ -235,14 +236,12 @@ class Main extends Component{
 						branchNo: branchNo,
 						sourceType: '0',
 						sourceNo: dbBranchNo,
-						parentItemNo: goods.parentItemNo||'',
-						currentPromotionNo: goods.currentPromotionNo
+						parentItemNo: goods.parentItemNo||''
 					})
 				})
 				this.getPageData(items)
 			})
 
-//		},1000)
 	}
 	isReplenish (config) {
 		
@@ -258,7 +257,6 @@ class Main extends Component{
 			        }
 			        replenish['cw'] = Fun(data.normalData, data.normal)
 			        replenish['dw'] = Fun(data.coldData, data.cold)
-			        
 	     			this.setState({ replenish })
 	  			}
 	 		}
@@ -270,11 +268,239 @@ class Main extends Component{
 	}
 	// 选择默认的促销
 	defaultPromoNo(promoStr) {
-		let defaultPromotionNo = promoStr.includes(',') ? promoStr.split(',')[0] : [promoStr]
+		let defaultPromotionNo = promoStr.includes(',') ? promoStr.split(',')[0] : promoStr
 		return defaultPromotionNo
+	}
+	addPromotionNo(nowGoods, tagType) {
+		// console.log(nowGoods, tagType)
+		// if (this.sourceType == 1) tagType = nowGoods.currentPromotionType
+		if (nowGoods.currentPromotionType == tagType) return nowGoods.currentPromotionNo 
+		const promotionCollectionsArr = nowGoods.promotionCollectionsArr
+		
+		let promoIndex
+		promotionCollectionsArr.forEach((item, index) => {
+			if (item.includes(tagType)) promoIndex = index
+		})
+		// console.log(promotionCollectionsArr, promoIndex)
+		return promotionCollectionsArr[promoIndex]
+	}
+	// 对统配促销信息进行处理
+	allPromotionHandle(res, nowGoods, _this = this) {
+		const tag = getGoodsTag(nowGoods, res)
+		const itemNo = nowGoods.itemNo
+		const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
+		const itemClsno = nowGoods.itemClsno
+		console.log(nowGoods)
+		console.log('ttag', tag, res)
+		let promotionList = []
+		let BFpromotionList = []
+		console.log('这是tag SZZZZZZZZZZZZZZZZZZZZZZZZZZZ', tag)
+		if (tag.FS || tag.SD || tag.ZK) {
+			nowGoods.orgiPrice = nowGoods.price
+			nowGoods.price = tag.price
+			promotionList.push({
+				name: tag.FS ? '首单特价' : (tag.SD ? '单日限购' : (tag.zkType + '折扣')),
+				msg: [(tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))],
+				promotionNo: _this.addPromotionNo(nowGoods, ((tag.FS && 'FS') || (tag.SD && 'SD') || (tag.ZK && 'ZK')))
+			})
+		}
+		if ('SZInfo' in tag && tag.SZInfo.length) {
+			// console.log(tag)
+			// console.log(nowGoods)
+			// console.log(tag)
+			// console.log(tag.SZInfo)
+			if ('SZFilterArr' in tag && tag['SZFilterArr'].length > 0) {
+				tag['SZFilterArr'].forEach(t => {
+					if (t == nowGoods.itemNo || t == nowGoods.itemClsno) {
+						
+					}
+				})
+			}
+			let realArr = tag.SZInfo.sort((a, b) => a - b)
+			let msg
+			if (tag['SZInfo'].length > 1) {
+				msg = tag['SZInfo'].map((item, index) => {
+					return `${index + 1}. 满￥${realArr[index]} 赠1样赠品：`,` ${tag['SZName'][index]}` 
+				})
+			} else {
+				msg = [`满￥${realArr[0]}，赠1样赠品：`, `${tag['SZName'][0]}`] 
+			}
+			
+			promotionList.push({
+				name: '首单满赠',
+				msg: msg,
+				promotionNo: _this.addPromotionNo(nowGoods, 'SZ'),
+				reachVal: tag.SZInfo[0]
+			})
+		}
+		if (tag.MS) {
+			promotionList.push({
+				name: '秒杀促销',
+				msg: [('购买数量不超过 ' + tag.msMaxQty+ nowGoods.unit + ' 参与秒杀活动，特价￥' + tag.msPrice)],
+				promotionNo: _this.addPromotionNo(nowGoods, 'MS')
+			})
+		}
+		if(tag.BG) {
+			console.log(546546)
+			let msg = { name: ((tag.BG == 'cls' ? '类别' : (tag.BG == 'brand' ? '品牌' : '')) + '买赠'),msg:[] }
+			const arr = res.BG[tag.BG][tag.BG == 'cls' ? itemClsno : (tag.BG == 'brand' ? brandNo : itemNo)]
+			console.log(msg, arr)
+			for (let i in arr) {
+				const giftInfo = res.BG.giftGoods[arr[i]][i]
+				msg.msg.push(giftInfo.explain ||  '满 ' + giftInfo.buyQty + nowGoods.unit + '送' + giftInfo.giftQty + nowGoods.unit + ' [' + giftInfo.giftName +']')
+			}
+			msg.promotionNo = _this.addPromotionNo(nowGoods, 'BG')
+			promotionList.push(msg)
+			console.log(promotionList)
+		}
+		if('MQ' in tag) {
+			// console.log('zhe是数量满减', nowGoods, tag)
+			const msg = `购买数量满${tag.MQ['buyQty'] + nowGoods.unit}减${tag.MQ['subMoney']}元`
+			promotionList.push({
+				name: '数量满减',
+				msg: [msg],
+				promotionNo: _this.addPromotionNo(nowGoods, 'MQ'),
+				buyQty: tag['MQ'].buyQty,    // 满 buyQty 减 subMoney
+				subMoney: tag['MQ'].subMoney,
+				qty: 0  // 当前真实数量
+			})
+		}
+		if (tag.MJ) {
+			// console.log(tag, 'sadasdass')
+			// console.log('nowGoods', nowGoods)
+			// console.log('resMJtag', res.MJ[tag.MJ], res)
+			let msg = { name: (tag.MJ == 'fullReduction' ? '全场' : (tag.MJ == 'cls' ? '类别' : (tag.MJ == 'brand' ? '品牌' : '商品'))) + '满减',msg:[]}
+			const arr = tag.MJ == 'fullReduction' ? res.MJ[tag.MJ] : res.MJ[tag.MJ][tag.MJ == 'cls' ? itemClsno : (tag.MJ == 'brand' ? brandNo : itemNo)]
+			// console.log(arr)
+			msg.promotionNo = _this.addPromotionNo(nowGoods, 'MJ')
+			arr.forEach(info => {
+				msg.msg.push(info.explain || '满'+info.reachVal +'减'+info.subMoney)
+				// console.log('s' , info, nowGoods)
+				if (info.sheetNo == nowGoods.currentPromotionNo) {
+					msg.reachVal = info.reachVal
+				}
+				if (msg.promotionNo == info.sheetNo) {
+					msg.reachVal = info.reachVal
+				}
+			})
+			msg.msg = [msg.msg.join('，')]
+			// console.log(tag, 'sadasdass')
+			promotionList.push(msg)
+			// console.log(msg, 'sadasdass')
+		}
+		if (tag.BF) {
+			const itemNo = nowGoods.itemNo
+			const brandNo = nowGoods.itemBrandno
+			const itemClsno = nowGoods.itemClsno
+			const infoArr = [res.BF.all, res.BF.cls[itemClsno], res.BF.brand[brandNo], res.BF.goods[itemNo]]
+			// console.log('nowGoods', nowGoods, infoArr)
+			// console.log('resBFtag', infoArr)
+			infoArr.forEach((item,i) => {
+				if (item && item.length) {
+					let name = (i==0?'全场':(i==1?'类别':(i==2?'品牌':'单品')))+'满赠'
+					item.forEach(info => {
+						BFpromotionList.push({
+							name,
+							msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
+							data: info.data,
+							promotionNo: _this.addPromotionNo(nowGoods, 'BF')
+						})
+					})
+					item.forEach(info => {
+						promotionList.push({
+							name,
+							msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
+							data: info.data,
+							promotionNo: _this.addPromotionNo(nowGoods, 'BF'),
+							reachVal: info.reachVal
+						})
+					})
+				}
+			})
+		}
+		nowGoods = Object.assign(nowGoods, tag)
+		// this.setData({ promotionList, goods: nowGoods, BFpromotionList})
+		this.promotionListLoaidng = true
+		// this.countPrice()
+		if (nowGoods.rewardPoint > 0) {
+			promotionList.push({
+				name: '积分',
+				msg: ['每买' + nowGoods.buyQty + nowGoods.unit + '获得' + nowGoods.rewardPoint + '积分']
+			})
+			// this.setData({ promotionList })
+		}
+		// console.log('promotionList', promotionList)
+		// console.log(nowGoods)
+		console.log('nowGoodstag', tag)
+
+		return promotionList
+	}
+
+	// 商品中添加当前所选择的促销字段 currentPromotion
+	addCurrentSelectedPromotion(goodsData = this.data.list['cw']) {
+		console.log(1134)
+		let currentPromotion = ['NO']  // 当前购物车商品的所选择促销数组
+		let currentPromotionNo = ['']  // 当前购物车商品的所选择促销单据数组
+		// console.log(445,goodsData)
+		goodsData.item.forEach((item, i) => {
+			// console.log(662, deepCopy(item))
+			if (item['promotionCollections']) {
+				// 不参与促销计算
+				let backSign
+				currentPromotion.length && currentPromotion.forEach((t, index) => {
+					if (
+						item.currentPromotionNo.includes('BG') 
+						|| item.currentPromotionNo.includes('SD') 
+						|| item.currentPromotionNo.includes('MS')
+						|| item.currentPromotionNo.includes('FS')
+						|| item.currentPromotionNo.includes('SD')
+						|| item.currentPromotionNo.includes('ZK')
+						|| item.currentPromotionNo.includes('MS')
+						|| item.currentPromotionNo.includes('RSD')
+					) backSign = 'return'   
+				})
+				console.log(item, 'backSign')
+				let promoObj = {
+					currentPromotionNo: '', // 编号
+					type: '',               // 促销类型
+					typeNum: 0              // 商品种类数量
+				} 
+				
+				
+				item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
+				if (item['currentPromotionType'] =='MJ') console.log(item,  promoObj.typeNum)
+				if (backSign == 'return') return   // 不保留重复的单据,并过滤无需凑单的单据
+				promoObj.type = item['currentPromotionNo'].slice(0, 2)
+				promoObj.currentPromotionNo = item['currentPromotionNo']
+				currentPromotion.unshift(promoObj)
+			}
+			// console.log(item)
+			// console.log(713, goodsData)
+			// console.log(item)
+		})
+		console.log('currentPromotion', currentPromotion)
+		
+		// 计算每个单据的类别数量, 并去除了重复单据
+		currentPromotion.forEach(item => {
+			if (item == 'NO') return
+			currentPromotion.forEach(t => {
+				if (t == 'NO') return
+				if (t.currentPromotionNo == item.currentPromotionNo) item.typeNum++
+			})
+			// console.log(22335)
+		})
+		currentPromotion = filterArr(currentPromotion)
+		// console.log(738 ,currentPromotion)
+
+		this.state.currentPromotion = currentPromotion
+		this.state.currentPromotionNo = currentPromotionNo
+		this.setState({ currentPromotion, currentPromotionNo })
+		// this.getAllPromotions(goodsData) // 处理所有促销
+		return goodsData
 	}
 	getPageData(items){
 		let t=this;
+		let allPromotion = {} // 所有促销挂载在此对象中，以促销单号作为键名
 		console.log(items, 'items')
 		API.Carts.getShoppingCartInfo({
 			data: {items:items?JSON.stringify(items):''},
@@ -282,6 +508,7 @@ class Main extends Component{
 				console.log(obj, 'obj')
 				if (!items) {
 					if(obj.code=='0'){
+						console.log(431)
 						obj.msg&&toast(obj.msg);
 						let arr=obj.data||[],
 						list=new Object(),
@@ -296,11 +523,47 @@ class Main extends Component{
 								// 添加当前所选的促销，若没有选择，默认选择最近的促销
 								if (item.promotionCollections) {
 									item.currentPromotionNo = item.currentPromotionNo || t.defaultPromoNo(item.promotionCollections)
-									item.currentPromotionType = shop.sourceType == 0 ? item.currentPromotionNo.slice(0, 2) : item.currentPromotionNo.slice(0, 3) 
+									item.currentPromotionType = item.currentPromotionNo.slice(0, 2)
 									item.promotionCollectionsArr = item.promotionCollections.includes(',') ?  item.promotionCollections.split(',') : [item.promotionCollections]	
 								}
 								if(item.itemNo.indexOf('Z')!=-1) item.isBind = true
-								const tag = getGoodsTag(item, this.promotionObj,true)
+								const tag = getGoodsTag(item, t.promotionObj,true)
+								console.log(111)
+								let promotionList = t.allPromotionHandle(t.promotionObj, item, t)
+								// 将当前促销信息推入 allPromotion 中
+								promotionList.length && promotionList.forEach((pItem, index) => {
+									console.log(pItem)
+									const type = pItem.promotionNo.slice(0, 2)
+									// console.log('allPromotion[pItem.promotionNo]', allPromotion, pItem.promotionNo)
+									// console.log(961, type)
+									if (allPromotion[pItem.promotionNo]) {
+										if (item['currentPromotionNo'] != pItem.promotionNo) return 
+										if (type == 'MJ') {
+											// console.log(item.realQty * item.orgiPrice, allPromotion[pItem.promotionNo])
+											allPromotion[pItem.promotionNo].price += item.realQty * item.orgiPrice
+										} else if (type == 'BF') {
+											allPromotion[pItem.promotionNo].price += item.realQty * item.orgiPrice
+										} else if (type == 'SZ') {
+											allPromotion[pItem.promotionNo].price += item.realQty * item.orgiPrice
+										} else if (type == 'MQ' && item.currentPromotionType == 'MQ') {
+											// console.log(pItem.promotionNo, item)
+											allPromotion[pItem.promotionNo].qty += item.realQty
+										}
+									} else {
+										allPromotion[pItem.promotionNo] = pItem
+										if (item['currentPromotionNo'] != pItem.promotionNo) return  allPromotion[pItem.promotionNo].price = 0
+										if (type == 'MJ') {
+											allPromotion[pItem.promotionNo].price = item.realQty * item.orgiPrice
+										} else if (type == 'BF') {
+											allPromotion[pItem.promotionNo].price = item.realQty * item.orgiPrice
+										} else if (type == 'SZ') {
+											allPromotion[pItem.promotionNo].price = item.realQty * item.orgiPrice
+										} else if (type == 'MQ' && item.currentPromotionType == 'MQ') {
+											allPromotion[pItem.promotionNo].qty = item.realQty
+										}
+									}
+								})
+								// console.log(450, 'promotionList', promotionList)
 								item = Object.assign(item, tag)
 								if(list[type]){
 									list[type].item.push(item);
@@ -325,8 +588,10 @@ class Main extends Component{
 								}
 							})
 						})
-						console.log(list, 'list')
-						t.setState({list,listKey});
+						// console.log(allPromotion)
+						// console.log(list, 'list')
+						t.addCurrentSelectedPromotion(list[`${listKey[0]}`])
+						t.setState({list,listKey,allPromotion});
 					}else{
 						toast(obj.msg)
 					}
@@ -343,6 +608,9 @@ class Main extends Component{
 	// 选择促销的下拉框
 	selectPromoMenu(k, item, i) {
 		const _this = this
+		const { list } = this.state
+		let data = list['cw'].item[i]
+		console.log(346,data) 
 		const menu = (
 			<Menu>
 				{
@@ -383,18 +651,14 @@ class Main extends Component{
 	selectPromotionClick(i, tag, k) {
 		console.log(i, tag)
 		let { list, listKey } = this.state
-		console.log(list, listKey, k)
 		if (list[k].item[i].currentPromotionNo == tag) return message.warning('请选择不同的促销')
 		list[k].item[i].currentPromotionNo = tag
 		list[k].item[i].currentPromotionType = tag.slice(0,2)
-		console.log(list)
 		this.setState({ list })
 		message.success('切换成功')
 	}
 	render(){
-		console.log(1)
 		let t=this,{loading,list,listKey,config,replenish}=t.state;
-		console.log(list)
 		return (<div className="carts">
 			<Loading show={loading} />
 			<Header getConfig={this.getConfig} />
@@ -425,6 +689,16 @@ class Main extends Component{
 									<span className="carts-content__cartsList_goods_li4">操作</span>
 								</p>
 								<ul className="carts-content__cartsList_goods">
+									<div className="promotionType">
+										<div className="typeTag">
+											<div className="tag">模板粗线</div>
+											<div className="promoInfo">促销的备注~~~</div>
+										</div>
+										<div className="typeInfo">
+											<div className="content">满减满赠等信息</div>
+											<div className="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">换促销》</div>
+										</div>
+									</div>
 									{
 										list[k].item.map((item,index)=>{
 											return (<li key={index}>
@@ -465,7 +739,18 @@ class Main extends Component{
 												</div>
 												<div className="carts-content__cartsList_goods_li1 carts-content__cartsList_goods_price">
 													<p>¥ {item.price}</p>
-													<p style={item.price == item.orgiPrice ? {display: 'none'} : {display: 'block'}}>¥ {item.orgiPrice||0}</p>
+													{
+														item.currentPromotionNo == 'MS' ? (
+															<p style={item.realQty <= item.msMaxQty ? 'display:block' : 'display:none'}>
+																¥ {item.msPrice||0}
+															</p>
+														) : (
+															<p style={item.price == item.orgiPrice ? {display: 'none'} : {display: 'block'}}>
+																¥ {item.orgiPrice||0}
+															</p>
+														)
+													}
+													
 												</div>
 												<div className="carts-content__cartsList_goods_li2">
 													<div className="carts-content__cartsList_goods_changeNum">

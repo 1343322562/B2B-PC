@@ -8,6 +8,7 @@ import './page.css';
 import { deepCopy,getGoodsImgSize,setUrlObj,getCookie,toast } from '../../public/utils.js';
 import { getAllPromotion,getGoodsTag } from '../../public/promotion.js';
 import API from '../../api'
+import { Switch } from 'antd';
 
 class App extends Component{
 	constructor(props){ /* 初次加载 */
@@ -17,8 +18,8 @@ class App extends Component{
 		this.state = {
 			payWayList: [ // 支付方式列表
 				{name:'余额支付', type:'ye', show:false},
-				// {name:'微信支付', type:'wx', show:false},
-				// {name:'支付宝', type:'zfb', show:false},   // 目前支付宝和微信没做
+				{name:'微信支付', type:'wx', show:false},
+				{name:'支付宝', type:'zfb', show:false},   // 目前支付宝和微信没做
 				{name:'货到付款', type:'hdfk', show:false}
 			],
 			pageLoading: true, // 是否显示页面
@@ -102,6 +103,7 @@ class App extends Component{
 				data:itemList,
 			},
 			success: ret => {
+				console.log('满减满赠', ret)
 				if (ret.code == 0) { // BF 买满赠 SZ 首赠  MJ  买满减  BG 买赠
 					let obj = {mq:[],mj:[],mz:[],gift:[]}
 					ret.data.forEach(item => {
@@ -168,8 +170,7 @@ class App extends Component{
 						mzObj = item
 					} else if (i == 'mj'&&(codPayMzFlag=='1'||nowPayWay!='hdfk')) {
 						mjObj = item
-					} else if (i == 'gift') {
-						
+					} else if (i == 'gift') {	
 						const promotion = this.promotionObj
 						item.forEach(i => {
 							const goods = promotion.BG.giftGoods[i.itemNo][i.id]
@@ -434,19 +435,36 @@ class App extends Component{
 			}
 			goodsData.push(data)
 		})
-		if (mjObj.length) { // 买满减
+		console.log(438,'满减data' , mjObj)
+		if (mjObj.length) { // 满减 | 数量满减
 			let mjData = []
+			let mqData = []
 		    mjObj.forEach(item => {
-		    	mjData.push({
-		      		sheetNo: item.promotionSheetNo,
-		          	promotionId: item.promotionId,
-		          	mjAmt: String(item.bonousAmt),
-		          	mjReachVal: String(item.bonousAmt) ,
-		          	orderAmt: String(item.orderAmt),
-		          	promotionItemNo: item.promotionItemNo || ''
-		        })
+					switch(item.promotionType) {
+						case 'MQ':
+							mqData.push({
+								sheetNo: item.promotionSheetNo,
+								promotionId: item.promotionId,
+								mjAmt: String(item.bonousAmt),
+								mjReachVal: String(item.bonousAmt) ,
+								orderQty: String(item.orderQty),
+								promotionItemNo: item.promotionItemNo || ''
+							})
+							request.mqData = JSON.stringify(mqData)
+							break;
+						case 'MJ':
+							mjData.push({
+								sheetNo: item.promotionSheetNo,
+								promotionId: item.promotionId,
+								mjAmt: String(item.bonousAmt),
+								mjReachVal: String(item.bonousAmt) ,
+								orderAmt: String(item.orderAmt),
+								promotionItemNo: item.promotionItemNo || ''
+							})
+							request.mjData = JSON.stringify(mjData)
+							break;
+					}
 		    })
-		    request.mjData = JSON.stringify(mjData)
 		}
 		
 		
@@ -575,7 +593,7 @@ class App extends Component{
 					{
 						payWayList.map(item => {
 							const type = item.type;
-							return (item.show?<li key={type} className={"settle-content__payWayList--"+type}>
+							return (item.show && (type!='wx' && type!='zfb')?<li key={type} className={"settle-content__payWayList--"+type}>
 								<i></i>
 								<span>{item.name}</span>
 								<div>
@@ -594,7 +612,6 @@ class App extends Component{
 					<span className="discount">已优惠{this.countDiscountsAmt()}元</span>
 				</p>
 				<div className="settle-promotion__box">
-				
 					<ol className="settle-promotion__title">
 						{
 							activityBtn.map(item => (item.show?<li key={item.type} onClick={()=>{this.setState({activityType:item.type})}} className={activityType == item.type?'act':''} >

@@ -1,6 +1,6 @@
 
 body{background:#f6f6f6;color:#313131;font-size:14px;}body,p,h1,h2,h3,h4,ul,li,ol,dl,input{padding:0;margin:0;}ul,li,ol,dl{list-style-type:none;}i,b,s{font-style:normal;font-weight:normal;}
-a{text-decoration:none;color:#313131;cursor: pointer;}
+a{text-decoration:none !important;color:#313131;cursor: pointer;}
 /* #开头为公共样式  */
 .c_w{width:1200px!important;}
 .c_min_w{min-width:1200px!important;}
