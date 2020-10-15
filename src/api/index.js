@@ -30,7 +30,8 @@ export default {
   	getSettlementPageInfo: (param) => ajax.post(`supplymini/getSettlementPageInfo.do`, param), // 购物车跳转结算页，获取所选商品
   	getOrderMeetingCoupons: (param) => ajax.post(`supplymini/getOrderMeetingCoupons`, param), // 获取兑换券列表
   	getSettlementPromotion: (param) => ajax.post(`supplymini/getSettlementPromotion.do`, param), // 获取满减满赠促销
-  	saveOrder: (param) => ajax.post(`supplymini/saveOrder.do`, param), // 保存订单
+		saveOrder: (param) => ajax.post(`supplymini/saveOrder.do`, param), // 保存订单
+		getWxPayShopParameters: (param) => ajax.post(`supplypc/getWxPayShopParameters.do`, param) // 获取 pc 支付二维码url
   },
   My: {
   	getUnusedCouponsSum: (param) => ajax.post(`supplymini/getUnusedCouponsSum.do`, param), // 获取优惠券数量
@@ -58,5 +59,5 @@ export default {
   	againOrder: (param) => ajax.post(`supplymini/againOrder.do`, param), // 获取加入购物车的商品，重下此单
     sheetSearch: (param) => ajax.post(`supplymini/sheetSearch.do`, param), // 当月订单查询
     sheetAmtSearch: (param) => ajax.post(`supplymini/sheetAmtSearch.do`, param),   // 当月订单金额查询
-  }
+	}
 }

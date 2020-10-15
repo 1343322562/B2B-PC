@@ -5,7 +5,7 @@ import Footer from '../../public/footer.jsx';
 import TopSearch from '../../public/top_search.jsx';
 import Loading from '../../public/pageLoading.jsx';
 import './page.css';
-import { deepCopy,getGoodsImgSize,setUrlObj,getCookie,toast } from '../../public/utils.js';
+import { deepCopy,getGoodsImgSize,setUrlObj,getCookie,toast, getIP } from '../../public/utils.js';
 import { getAllPromotion,getGoodsTag } from '../../public/promotion.js';
 import API from '../../api'
 
@@ -17,7 +17,7 @@ class App extends Component{
 		this.state = {
 			payWayList: [ // 支付方式列表
 				{name:'余额支付', type:'ye', show:false},
-				// {name:'微信支付', type:'wx', show:false},
+				{name:'微信支付', type:'wx', show:false},
 				// {name:'支付宝', type:'zfb', show:false},   // 目前支付宝和微信没做
 				{name:'货到付款', type:'hdfk', show:false}
 			],
@@ -46,7 +46,8 @@ class App extends Component{
 				{name:'买满(赠/减)',type:'mm',show:false},
 				{name:'可用优惠券',type:'yh',show:false},
 				{name:'兑换券',type:'dh',show:false}
-			]
+			],
+			userIp: '120.228.1.183'  // 用户 IP 地址
 		}
 		
 		this.getConfig = this.getConfig.bind(this)
@@ -55,6 +56,7 @@ class App extends Component{
 		this.selectCup = this.selectCup.bind(this)
 	}
 	componentDidMount() { /* 初次渲染组件 */
+		this.data.userIp = getIP() // 获取用户 IP 地址
 		this.userObj = JSON.parse(getCookie('USER_INFO')||'{}')
 		const selected = this.search.selected
 		if (selected) {
@@ -336,7 +338,7 @@ class App extends Component{
 		return Number((money<0?0:money).toFixed(2));
 	}
 	ordersSubmit(){
-		
+		const _this = this
 		const { goodsList,orderTotalAmt,nowPayWay,config ,memo, accountBalance,mjObj,mzObj,mzSelectedObj,couponsObj,cupSelected} = this.state
 		const { replenishNo } = this.search
 		const { dbBranchNo } = this.userObj
@@ -485,26 +487,47 @@ class App extends Component{
 		this.setState({loading: true,loadingTitle:'提交订单...'})
 		
 		API.Settlement.saveOrder({
-	      data: request,
-	      success: res => {
-					console.log(res)
-	      	const orderNo = res.data
-	        if (res.code == 0 && orderNo) {
-	          this.setState({orderNo,pageType:'1'})
-	        } else {
-	          toast(res.msg || '下单请求失败,请与管理员联系。')
-	        }
-	      },
-	      error: ()=>{
-	        toast('提交订单失败，请检查网络是否正常。')
-	      },
-	      complete: ()=> {
-	      	this.setState({ loading: false })
-	      }
-	    })
-		
-		
+			data: request,
+			success: res => {
+				console.log(491, res, request.payWay)
+				const orderNo = res.data
+				if (res.code == 0 && orderNo) {
+					this.setState({orderNo,pageType:'1'})
+					if (request.payWay == '1') { // 在线支付
+						console.log(10, this, )
+            _this.onlinePay(orderNo)
+          }
+				} else {
+					toast(res.msg || '下单请求失败,请与管理员联系。')
+				}
+			},
+			error: ()=>{
+				toast('提交订单失败，请检查网络是否正常。')
+			},
+			complete: ()=> {
+				this.setState({ loading: false })
+			}
+		})
 	}
+	// 保存订单后在线支付(获取二维码 url)
+  onlinePay (orderNo) {
+	console.log(10000)
+    const { userIp } = this.state
+    let requestObj = {
+      out_trade_no: orderNo,     // 订单号
+      body: '具体看微信支付文档',  // 商品描述
+      spbillIp: userIp           // 用户当前 IP 地址 
+    }
+    API.Settlement.getWxPayShopParameters({
+      data: requestObj,
+      success(res) {
+        console.log(542, res)
+      },
+			error(res) {
+				console.log(526, res)
+			}
+    })
+  }
 	getMemo (e) {
 		const memo = e.target.value.trim()
 		this.setState({memo})

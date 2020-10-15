@@ -107,3 +107,9 @@ export function tim(currentDay) {
   console.log(tragetTime, '这是一周前日期，格式为2010-01-01')
   return tragetTime;
 }
+
+// 获取用户 IP 地址
+export function getIP() {
+	let userIp = sessionStorage.getItem("userIp")
+	return userIp
+}

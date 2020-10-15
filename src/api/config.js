@@ -26,7 +26,8 @@ export default {
 			// baseURL: window.location.origin + '/zksrb2b-web',
 			// baseURL: 'https://xcx.wgjnh.com/zksrb2b-web',
 			baseURL: 'https://mmj.zksr.cn/zksrb2b-web/',
-//			baseURL: 'http://192.168.1.113:8091/zksrb2b-web/',
+			// baseURL: 'http://192.168.2.7:8082/zksrb2b-web/',
+			// baseURL: 'http://192.168.1.113:8091/zksrb2b-web/',
 			url,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
