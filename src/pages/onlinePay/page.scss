@@ -1,0 +1,63 @@
+.online-pay{
+  background-color: #eeeeee;
+  width: 100%;
+  min-height: 100vh;
+  position: absolute;
+
+  .pay-container {
+    width: 1000px;
+    min-height: 1000px;
+    margin: 40px auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+
+    .pay-title {
+      font-size: 28px;
+    }
+
+    .pay-content {
+      width: 90%;
+      padding: 25px 5%;
+      
+      .pay-logo {
+        height: 40px;
+        width: 140px;
+        display: block;
+      }
+
+      .pay-scancode {
+        height: 200px;
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .pay-codeinfo {
+        height: 62px;
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+
+    .pay-info {
+      background-color: #eeeeee;
+      display: flex;
+      justify-content: space-between;
+
+      .pay-sheetno {
+        display: flex;
+        align-items: flex-end;
+        font-size: 16px;
+
+        .span{
+          font-size: 20px;
+          margin-right: 100px;
+        }
+      }
+    }
+
+  }
+}
+
