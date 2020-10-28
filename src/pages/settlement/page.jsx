@@ -56,7 +56,7 @@ class App extends Component{
 		this.selectCup = this.selectCup.bind(this)
 	}
 	componentDidMount() { /* 初次渲染组件 */
-		this.data.userIp = getIP() // 获取用户 IP 地址
+		// this.data.userIp = getIP() // 获取用户 IP 地址
 		this.userObj = JSON.parse(getCookie('USER_INFO')||'{}')
 		const selected = this.search.selected
 		if (selected) {
@@ -378,7 +378,7 @@ class App extends Component{
 					toast('当前余额不足')
 					return
 				}
-			} else if (nowPayWay == 'wx'||nowPayWay == 'zfb') { // 微信 和 支付宝 
+			} else if (nowPayWay == 'wx' || nowPayWay == 'zfb') { // 微信 和 支付宝 
 				request.onlinePayAmtString = amt
 				request.onlinePayway = nowPayWay.toUpperCase()
 				request.payWay = '1'
