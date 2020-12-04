@@ -6,36 +6,80 @@
 
   .pay-container {
     width: 1000px;
-    min-height: 1000px;
+    box-shadow: 0 0 15px #ccc;
+    min-height: 700px;
     margin: 40px auto;
     background-color: #fff;
     border: 1px solid #ddd;
 
     .pay-title {
       font-size: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      .pay-a-tag {
+        font-size: 13px;
+        width: 150px;
+        display: flex;
+        justify-content: space-around;
+
+        a{
+          border-bottom: 1px solid #ffffff;
+          padding: 0 3px 1px;
+          transition: transform .1s;
+        }
+        a:hover {
+          border-bottom: 1px solid #777777;
+        }
+
+        span {
+          background-color: #666666;
+          height: 20px;
+          width: 1px;
+        }
+      }
     }
 
     .pay-content {
       width: 90%;
       padding: 25px 5%;
+
+      .code-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+
+        .wxpay-code-box {
+        }
+  
+        .wxpay-code-help-box {
+
+          .wxpay-help{
+            margin-left: 30px;
+            height: 400px;
+          }
+        }
+      }
       
+
       .pay-logo {
         height: 40px;
         width: 140px;
         display: block;
       }
 
-      .pay-scancode {
-        height: 200px;
-        width: 200px;
+      .pay-scancode {    
         display: block;
-        margin: 0 auto;
+        margin: 0 auto 15px;
         padding: 20px;
+        border: 1px solid #ccc;
       }
 
-      .pay-codeinfo {
-        height: 62px;
-        width: 200px;
+      .pay-codeinfo {    
+        height: 81px;
+        width: 243px;
         display: block;
         margin: 0 auto;
       }

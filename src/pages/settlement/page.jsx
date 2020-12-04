@@ -5,7 +5,7 @@ import Footer from '../../public/footer.jsx';
 import TopSearch from '../../public/top_search.jsx';
 import Loading from '../../public/pageLoading.jsx';
 import './page.css';
-import { deepCopy,getGoodsImgSize,setUrlObj,getCookie,toast, getIP } from '../../public/utils.js';
+import { deepCopy,getGoodsImgSize,setUrlObj,getCookie,toast, getIP, encodeUnicode } from '../../public/utils.js';
 import { getAllPromotion,getGoodsTag } from '../../public/promotion.js';
 import API from '../../api'
 
@@ -17,8 +17,8 @@ class App extends Component{
 		this.state = {
 			payWayList: [ // 支付方式列表
 				{name:'余额支付', type:'ye', show:false},
-				{name:'微信支付', type:'wx', show:false},
-				// {name:'支付宝', type:'zfb', show:false},   // 目前支付宝和微信没做
+				// {name:'微信支付', type:'wx', show:false},
+				// {name:'支付宝', type:'zfb', show:false},
 				{name:'货到付款', type:'hdfk', show:false}
 			],
 			pageLoading: true, // 是否显示页面
@@ -32,7 +32,7 @@ class App extends Component{
 			goodsList: [], // 商品列表
 			realPayAmt:0, // 支付金额
 			memo:'', // 备注
-			pageType:'0', // 0 计算页  1 成功页  2 失败页
+			pageType:'0', // 0 计算页  1 成功页  2 失败页 3 支付页
 			orderNo:'',
 			mzShowIndex: 0,
 			mzObj:[],
@@ -56,7 +56,7 @@ class App extends Component{
 		this.selectCup = this.selectCup.bind(this)
 	}
 	componentDidMount() { /* 初次渲染组件 */
-		// this.data.userIp = getIP() // 获取用户 IP 地址
+		this.state.userIp = getIP() // 获取用户 IP 地址
 		this.userObj = JSON.parse(getCookie('USER_INFO')||'{}')
 		const selected = this.search.selected
 		if (selected) {
@@ -485,23 +485,28 @@ class App extends Component{
 		
 		console.log(request)
 		this.setState({loading: true,loadingTitle:'提交订单...'})
-		
+		 console.log(nowPayWay)
 		API.Settlement.saveOrder({
 			data: request,
 			success: res => {
 				console.log(491, res, request.payWay)
 				const orderNo = res.data
 				if (res.code == 0 && orderNo) {
-					this.setState({orderNo,pageType:'1'})
+					console.log(100000)
 					if (request.payWay == '1') { // 在线支付
 						console.log(10, this, )
-            _this.onlinePay(orderNo)
-          }
+            _this.onlinePay(orderNo, nowPayWay)
+						this.setState({ orderNo })
+          } else {
+					  this.setState({orderNo,pageType:'1'})
+					}
 				} else {
+					console.log(100000)
 					toast(res.msg || '下单请求失败,请与管理员联系。')
 				}
 			},
 			error: ()=>{
+				console.log(1000001)
 				toast('提交订单失败，请检查网络是否正常。')
 			},
 			complete: ()=> {
@@ -510,24 +515,56 @@ class App extends Component{
 		})
 	}
 	// 保存订单后在线支付(获取二维码 url)
-  onlinePay (orderNo) {
-	console.log(10000)
-    const { userIp } = this.state
-    let requestObj = {
-      out_trade_no: orderNo,     // 订单号
-      body: '具体看微信支付文档',  // 商品描述
-      spbillIp: userIp           // 用户当前 IP 地址 
-    }
-    API.Settlement.getWxPayShopParameters({
-      data: requestObj,
-      success(res) {
-        console.log(542, res)
-      },
-			error(res) {
-				console.log(526, res)
-			}
-    })
+  onlinePay (orderNo, nowPayWay) {
+		switch(nowPayWay) {
+			case 'wx':
+				console.log(997)
+				this.wxPay(orderNo)
+				break;
+			case 'zfb':
+				this.zfbPay(orderNo)
+				console.log(998)
+				break;
+		}
+		console.log(99)
   }
+	wxPay(orderNo) {
+		const itemTotalMoney = this.countRealPayAmt()
+		API.Liquidation.getWxPayShopParameters({
+			data: {
+				out_trade_no: orderNo,
+				body: 'PC商城微信支付',
+				spbillIp: this.state.userIp,
+				itemTotalMoney
+			},
+			success(res) {
+				console.log(8887,res)
+				const wxPayData = encodeUnicode(res.data)
+				// const htmlText = res.data.sHtmlText
+				window.location.href = `#/order/onlinePay?wxPayData=${wxPayData}&type=wx&amt=${itemTotalMoney}&orderNo=${orderNo}`
+				// window.open(`#/order/onlinePay?sHtmlText=${htmlText}`)
+			}
+		})
+	}
+	zfbPay(orderNo) {
+		const itemTotalMoney = this.countRealPayAmt()
+		API.Liquidation.getZfbPayParameters({
+			data: {
+				out_trade_no: orderNo,
+				body: 'PC商城支付宝支付',
+				itemTotalMoney
+			},
+			success(res) {
+				console.log(8887,res)
+				const htmlText = encodeUnicode(res.data.sHtmlText)
+				window.location.href = `#/order/onlinePay?sHtmlText=${htmlText}&type=zfb&amt=${itemTotalMoney}&orderNo=${orderNo}`
+				// window.open(`#/order/onlinePay?sHtmlText=${htmlText}`)
+			},
+			complete(res) {
+				console.log(78,res)
+			}
+		})
+	}
 	getMemo (e) {
 		const memo = e.target.value.trim()
 		this.setState({memo})
@@ -540,7 +577,7 @@ class App extends Component{
 		this.setState({ mzSelectedObj })
 	}
 	selectCup (e) {
-		const { no } = e.currentTarget.dataset
+		const { no } = e.currentTarget.dataset	
 		this.setState({cupSelected:no})
 		this.basecupSelected = no
 	}

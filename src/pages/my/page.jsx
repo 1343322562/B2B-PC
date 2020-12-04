@@ -208,7 +208,7 @@ class Main extends Component{
 					</div>
 					
 					<div className="l2">
-						<div className="order block">
+						{/* <div className="order block">
 							<div className="blockTitle">
 								当月订单
 								<Space direction="vertical" size={12}>
@@ -240,7 +240,7 @@ class Main extends Component{
 							</li>
 								
 							</ul>
-						</div>
+						</div> */}
 					</div>
 
 					<div className="l2">

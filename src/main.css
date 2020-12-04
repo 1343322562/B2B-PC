@@ -44,7 +44,7 @@ a.c_top_search__right_carts{cursor: pointer;font-size: 12px;position: absolute;t
 .c_top_search__right_msg{position: absolute;top: 19px;right: 151px;background: url("./images/msg_icon.png")no-repeat 10px center;background-size: 22px;height: 35px;padding: 0 10px 0 36px;line-height: 35px;border: 1px solid #ef8888;font-size: 12px;color: #fff;background-color:#ef8888 ;border-radius: 20px;display: block;}
 
 /*顶部logo*/
-.c_logo{display:block;height:80px;width:300px;position:absolute;top:0;left:0;background:url('./images/JCLogo.png')no-repeat left top;background-size: contain;}
+.c_logo{display:block;height:80px;width:300px;position:absolute;top:0;left:0;background:url('./images/logo.png')no-repeat left top;background-size: contain;}
 .c_logo_title{position:absolute;left:400px;top:20px;font-size:25px;}
 /*菜单列表*/
 .c_top_nav__box{margin:0 auto;position:relative;}

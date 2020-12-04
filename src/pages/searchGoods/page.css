@@ -47,6 +47,7 @@
 .item-content__list_goods_tag{padding-top: 7px;}
 .item-content__list_goods_tag>span{display: inline-block;font-size: 5px;padding: 1px 3px;border-radius: 5px;margin-left: 5px;border: 1px solid transparent;}
 .item-content__list_goods_tag>span:first-child{margin: 0;}
-.item-content__list_goods_tag>.NonReturnable{background-color: #d40000;border-color:#d40000 ;color: #fff;}
+.item-content__list_goods_tag>.NonReturnable{background-color: #d40000;border-color:#d40000 ;color: #fff; font-size: 12px;}
+.item-groupList__goods .NonReturnable {background-color: #d40000;border-color:#d40000 ;color: #fff;padding: 2px 4px; font-size: 11px; border-radius: 5px;margin-top: 2px;}
 .item-content__list_goods_tag>.drxg,.item-content__list_goods_tag>.sdtj{background-color: transparent;color: #d40000;border-color: #d40000;}
 .item-content__list_goods_tag>.mz{background-color: #d40000;color: #fff;border-color: #d40000;}

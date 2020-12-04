@@ -41,7 +41,7 @@ var routers = [
 		path:'/order/details',
 		component:asyncComponent(() => import("./pages/orderDetails/page.jsx"))
 	},
-	{/*订单详情*/
+	{/*在线支付*/
 		path:'/order/onlinePay',
 		component:asyncComponent(() => import("./pages/onlinePay/page.jsx"))
 	},

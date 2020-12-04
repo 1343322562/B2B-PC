@@ -352,6 +352,9 @@ class App extends Component{
 										<p className="item-groupList__goods_info_name"><a href={this.getOpenUrl(goods.itemNo)}  >{goods.itemName}</a></p>
 										<p className="item-groupList__goods_info_price">特价: <span>¥{goods.price}</span></p>
 										{goods.bdPsPrice?<p className="item-groupList__goods_info_salePrice">原价: <span>¥{goods.bdPsPrice}</span></p>:''}
+										{
+											<span className="NonReturnable">{(goods.enReturnGoods=='0'||goods.isProhibit=='1')?"不可退":"可退"}</span>
+										}
 										<a href={this.getOpenUrl(goods.itemNo)} className="item-groupList__goods_btn">立即抢购</a>
 									</div>
 								</li>

@@ -113,3 +113,26 @@ export function getIP() {
 	let userIp = sessionStorage.getItem("userIp")
 	return userIp
 }
+
+// 文字 转 unicode
+export function encodeUnicode(str) {
+	var res = [];  
+	for ( var i=0; i<str.length; i++ ) {  
+	res[i] = ( "00" + str.charCodeAt(i).toString(16) ).slice(-4);  
+	}  
+	return "\\u" + res.join("\\u");  
+}
+
+// 解码  
+export function decodeUnicode(str) {  
+	console.log(str)
+	str = str.replace(/\\/g, "%");
+	//转换中文
+ str = unescape(str);
+	//将其他受影响的转换回原来
+ str = str.replace(/%/g, "\\");
+	//对网址的链接进行处理
+ str = str.replace(/\\/g, "");
+ console.log(str)
+ return str;
+}  

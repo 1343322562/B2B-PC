@@ -10,7 +10,7 @@ export default {
 		this.ajax('get', url, param)
 	},
 	ajax(type, url, param) {
-		param.data.platform = '3'
+		param.data.platform = '2'
 		let userInfo =  JSON.parse(getCookie('USER_INFO')||'{}')
 		const hashHistory = createHashHistory()
 		if (userInfo.token) {
@@ -20,13 +20,13 @@ export default {
 		} else {
 			hashHistory.location.pathname.indexOf('user')==-1 && backLogin(hashHistory)
 		}
-//		url = (url.substring(url.indexOf('/'))).replace(new RegExp(/(.do)/g),'.json')
+		// url = (url.substring(url.indexOf('/'))).replace(new RegExp(/(.do)/g),'.json')
 		axios({
 //			baseURL: 'http://localhost:9000/json/',
-			// baseURL: window.location.origin + '/zksrb2b-web',
+			baseURL: window.location.origin + '/zksrb2b-web',
 			// baseURL: 'https://xcx.wgjnh.com/zksrb2b-web',
-			// baseURL: 'https://mmj.zksr.cn/zksrb2b-web/',
-			baseURL: 'http://192.168.2.7:8082/zksrb2b-web/',
+			// baseURL: 'https://mmj.zksr.cn/zksrb2b-web/',`
+			// baseURL: 'http://192.168.2.7:8082/zksrb2b-web/',
 			// baseURL: 'http://192.168.1.113:8091/zksrb2b-web/',
 			url,
 			headers: {
@@ -48,6 +48,7 @@ export default {
 			}
 			param.complete && param.complete()
 		}).catch(err => {
+			console.log('err', err)
 			param.error && param.error(err)
 			param.complete && param.complete()
 		})

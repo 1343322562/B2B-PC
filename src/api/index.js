@@ -59,5 +59,10 @@ export default {
   	againOrder: (param) => ajax.post(`supplymini/againOrder.do`, param), // 获取加入购物车的商品，重下此单
     sheetSearch: (param) => ajax.post(`supplymini/sheetSearch.do`, param), // 当月订单查询
     sheetAmtSearch: (param) => ajax.post(`supplymini/sheetAmtSearch.do`, param),   // 当月订单金额查询
+	},
+	Liquidation: {
+		getZfbPayParameters: (param) => ajax.post(`supplypc/getZfbPayParameters.do`, param),   // 支付宝支付
+		getWxPayShopParameters: (param) => ajax.post(`supplypc/getWxPayShopParameters.do`, param),
 	}
 }
+// http://192.168.2.7:8082/zksrb2b-web/supplypc/getWxPayShopParameters.do?out_trade_no&body&spbillIp=120.228.1.183
